@@ -38,6 +38,44 @@ export default function LoginPage({ searchParams }) {
           <br />
           予定の編集はGoogleカレンダー側で行います。
         </p>
+
+        {/* サンプル画面 */}
+        <div className="mt-8 text-left">
+          <p className="mb-3 text-center text-xs font-semibold text-slate-400">
+            ログイン後の画面イメージ
+          </p>
+          <div className="overflow-hidden rounded-xl border border-slate-200 bg-slate-50">
+            {/* ヘッダー */}
+            <div className="bg-blue-600 px-4 py-3 text-white">
+              <p className="text-[10px] opacity-75">2026年6月27日（土）</p>
+              <p className="text-sm font-bold">今日の予定</p>
+              <p className="text-[10px] opacity-75">3件の予定</p>
+            </div>
+            {/* 予定カード */}
+            <div className="space-y-2 p-3">
+              {[
+                { time: "09:00 – 10:00", title: "チームミーティング", memo: "議題の確認", color: "#2563eb", tag: "あと25分" },
+                { time: "12:00 – 13:00", title: "ランチ", memo: "", color: "#16a34a", tag: "あと3時間" },
+                { time: "14:00 – 15:30", title: "プロジェクトレビュー", memo: "資料を準備", color: "#ea580c", tag: "あと5時間" },
+              ].map((item) => (
+                <div
+                  key={item.title}
+                  className="rounded-lg bg-white px-3 py-2 shadow-sm"
+                  style={{ borderLeft: `3px solid ${item.color}` }}
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-semibold" style={{ color: item.color }}>{item.time}</span>
+                    <span className="rounded-full bg-slate-100 px-1.5 py-0.5 text-[9px] text-slate-400">{item.tag}</span>
+                  </div>
+                  <p className="text-[11px] font-semibold text-slate-700">{item.title}</p>
+                  {item.memo && (
+                    <p className="mt-0.5 text-[10px] text-slate-400">{item.memo}</p>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
     </main>
   );
