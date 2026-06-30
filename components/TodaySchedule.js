@@ -10,6 +10,7 @@ import {
 } from "@/lib/google-calendar";
 import EventCard from "@/components/EventCard";
 import NotificationManager from "@/components/NotificationManager";
+import PushSubscriptionManager from "@/components/PushSubscriptionManager";
 
 function todayLabel() {
   return new Date().toLocaleDateString("ja-JP", {
@@ -72,6 +73,13 @@ export default function TodaySchedule() {
 
       setEvents(enriched);
       setNotifyMinutes(settingsRes.data?.notify_minutes ?? 15);
+
+      // バックグラウンド通知用にイベントをキャッシュ
+      fetch("/api/push/cache-events", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ events: calendarEvents }),
+      }).catch(() => {});
 
       const memoMap = {};
       (memosRes.data || []).forEach((row) => {
@@ -149,10 +157,12 @@ export default function TodaySchedule() {
         <p className="mt-1.5 text-[13px] opacity-80">{events.length}件の予定</p>
       </header>
 
-      <div className="mx-4 my-4 flex items-center gap-2 rounded-xl border border-blue-200 bg-blue-50 px-3.5 py-3 text-[13px] text-blue-700">
+      <div className="mx-4 mt-4 flex items-center gap-2 rounded-xl border border-blue-200 bg-blue-50 px-3.5 py-3 text-[13px] text-blue-700">
         <span>🔔</span>
         <span>{notifyMinutes}分前に通知します（設定で変更可）</span>
       </div>
+
+      <PushSubscriptionManager />
 
       {loading && (
         <p className="px-4 py-8 text-center text-sm text-slate-500">
